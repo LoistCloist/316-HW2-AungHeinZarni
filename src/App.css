@@ -10,6 +10,10 @@
   --swatch-contrast: #111111; 
   --swatch-accent: #669966; 
   --swatch-status: #123456;
+  --swatch-link-emphasis: #b88320;
+  --swatch-link-contrast:lightgreen;
+  --swatch-link-hover:pink;
+  --switch-link-active: magenta;
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 }
 
