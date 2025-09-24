@@ -77,7 +77,18 @@ export default class SongCard extends React.Component {
                 onDrop={this.handleDrop}
                 draggable="true"
             >
-                {song.title} by {song.artist}
+                <span id={"song-card-title-" + num} className="song-card-title">{song.title}</span>
+                <span id={"song-card-year-" + num} className="song-card-year"> ({song.year})</span>
+                <span id={"song-card-by-" + num} className="song-card-by"> by </span>
+                <span id={"song-card-artist-" + num} className="song-card-artist">{song.artist}</span>
+                <button 
+                    type="button"
+                    id={"remove-song-button-" + num}
+                    className="song-card-button"
+                    draggable="false"
+                >
+                    ×
+                </button>
             </div>
         )
     }
