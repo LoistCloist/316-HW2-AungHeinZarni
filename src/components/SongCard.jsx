@@ -6,7 +6,8 @@ export default class SongCard extends React.Component {
 
         this.state = {
             isDragging: false,
-            draggedTo: false
+            draggedTo: false,
+            isHovered: false,
         }
     }
     handleDragStart = (event) => {
@@ -53,7 +54,16 @@ export default class SongCard extends React.Component {
         // ASK THE MODEL TO MOVE THE DATA
         this.props.moveCallback(sourceId, targetId);
     }
-
+    handleMouseEnter = (event) => {
+        this.setState(prevState => ({
+            isHovered: true
+        }))
+    }
+    handleMouseLeave = (event) => {
+        this.setState(prevState => ({
+            isHovered: false
+        }))
+    }
     getItemNum = () => {
         return this.props.id.substring("song-card-".length);
     }
@@ -66,18 +76,23 @@ export default class SongCard extends React.Component {
         if (this.state.draggedTo) {
             itemClass = "song-card-dragged-to";
         }
+        if (this.state.isHovered) {
+            itemClass += " song-card-hovered";
+        }
         return (
             <div
-                id={'song-' + num}
+                id={'song-card-' + num}
                 className={itemClass}
                 onDragStart={this.handleDragStart}
                 onDragOver={this.handleDragOver}
                 onDragEnter={this.handleDragEnter}
                 onDragLeave={this.handleDragLeave}
                 onDrop={this.handleDrop}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
                 draggable="true"
             >
-                <a id={"song-card-title-" + num} className="song-card-title" target="1" href={"https://www.youtube.com/watch?v="+song.youTubeId}>{song.title}</a>
+                <a id={"song-card-title-" + num} className="song-card-title" href={"https://www.youtube.com/watch?v="+song.YtId}>{song.title}</a>
                 <span id={"song-card-year-" + num} className="song-card-year"> ({song.year})</span>
                 <span id={"song-card-by-" + num} className="song-card-by"> by </span>
                 <span id={"song-card-artist-" + num} className="song-card-artist">{song.artist}</span>
@@ -87,7 +102,6 @@ export default class SongCard extends React.Component {
                     className="song-card-button"
                     draggable="false"
                 >
-                    ×
                 </button>
             </div>
         )

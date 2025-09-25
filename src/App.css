@@ -122,7 +122,10 @@ body {
   border-color: #cc8a00;
 }
 
-#song-cards .song-card-title { font-weight: bold; }
+#song-cards .song-card-title {
+  font-weight: bold;
+  color: var(--swatch-link-emphasis)
+}
 #song-cards .song-card-artist { font-style: italic; }
 #song-cards .song-card-button {
   float: right;
@@ -187,8 +190,16 @@ body {
 .unselected-song-card {
     background-color: var(--swatch-complement);
 }
+
+.unselected-song-card:hover {
+  cursor: pointer;
+  background-color: var(--swatch-contrast);
+  color:white;
+}
 .song-card:hover .song-card-title:hover {
-  color: var(--swatch-link-hover);
+  cursor: pointer;
+  background-color: var(--swatch-contrast);
+  color:white;
 }
 
 .song-card-title:active {
