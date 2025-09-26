@@ -117,12 +117,22 @@ body {
   color: var(--swatch-contrast);
   border: 2px solid #333;
 }
+#song-cards .song-card-dragged-to {
+  background-color: var(--swatch-accent);
+  color: white;
+  border: 3px solid var(--swatch-contrast);
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    font-size: 24pt;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 125px;
+}
 #song-cards .song-card:hover {
   background-color: var(--swatch-contrast);
   color: var(--swatch-contrast);
   border: 2px solid #333;
 }
-
 
 #song-cards .song-card-title {
   font-weight: bold;
@@ -144,7 +154,7 @@ body {
 
 
 .playlist-card, .selected-playlist-card, .unselected-playlist-card,
-.song-card, .selected-song-card, .unselected-song-card {
+.song-card, .selected-song-card, .unselected-song-card, .is-dragged-to, .is-dragging {
   font-size: 24pt;
   margin: 10px;
   padding: 10px;
@@ -226,6 +236,9 @@ body {
 .is-dragging {
   border: 2px black solid;
   opacity: 0.5;
+  background-color: var(--swatch-complement);
+  color: var(--swatch-contrast);
+  border: 2px solid #333;
 }
 
 
