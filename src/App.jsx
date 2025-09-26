@@ -18,6 +18,7 @@ import SidebarHeading from './components/SidebarHeading.jsx';
 import SidebarList from './components/PlaylistCards.jsx';
 import SongCards from './components/SongCards.jsx';
 import Statusbar from './components/Statusbar.jsx';
+import EditSongModal from './components/EditSongModal.jsx';
 
 class App extends React.Component {
     constructor(props) {
@@ -268,6 +269,10 @@ class App extends React.Component {
         let transaction = new DeleteSong_Transaction(this, start, end);
         this.tps.processTransaction(transaction);
     }
+    addEditSongTransaction = (start, end) => {
+        let transaction = new EditSong_Transaction(this, start, end);
+        this.tps.processTransaction(transaction);
+    }
     // THIS FUNCTION BEGINS THE PROCESS OF PERFORMING AN UNDO
     undo = () => {
         if (this.tps.hasTransactionToUndo()) {
@@ -296,12 +301,13 @@ class App extends React.Component {
             this.showDeleteListModal();
         });
     }
-    markSongForDeletion = (key) => {
+    markSongForEditing = (id) => {
         this.setState(prevState => ({
             ...prevState,
-            songKeyMarkedForDeletion: key
-        }));
-        this.deleteSong(key);
+            songIdToEdit: id
+        }), () => {
+            this.showEditSongModal();
+        });
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
@@ -312,6 +318,15 @@ class App extends React.Component {
     // THIS FUNCTION IS FOR HIDING THE MODAL
     hideDeleteListModal() {
         let modal = document.getElementById("delete-list-modal");
+        modal.classList.remove("is-visible");
+    }
+    showEditSongModal() {
+        let modal = document.getElementById("edit-song-modal");
+        modal.classList.add("is-visible");
+    }
+    // THIS FUNCTION IS FOR HIDING THE MODAL
+    hideEditSongModal() {
+        let modal = document.getElementById("edit-song-modal");
         modal.classList.remove("is-visible");
     }
     render() {
@@ -344,11 +359,18 @@ class App extends React.Component {
                 <SongCards
                     currentList={this.state.currentList}
                     moveSongCallback={this.addMoveSongTransaction} 
-                    deleteSongCallback={(youTubeId) => this.deleteSong(youTubeId)}/>
+                    deleteSongCallback={(youTubeId) => this.deleteSong(youTubeId)}
+                    editSongCallback={this.markSongForEditing}
+                />
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}
                     deleteListCallback={this.deleteMarkedList}
+                />
+                <EditSongModal
+                    song={this.state.songIdToEdit}
+                    hideEditSongModalCallback={this.hideEditSongModal}
+                    EditListCallback={this.editMarkedSong}
                 />
             </div>
         );

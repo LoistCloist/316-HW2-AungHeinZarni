@@ -59,7 +59,17 @@ export default class SongCard extends React.Component {
     handleDeleteSong = (event) => {
         console.log("handleDeleteSong", this.props.song.youTubeId);
         event.stopPropagation();
-        this.props.deleteSongCallback(this.props.song.youTubeId);
+        this.props.deleteSongCallback(this.props.song.youTubeId)
+    }
+    handleClick = (event) => {
+        event.stopPropagation();
+        this.handleToggleEdit(event);
+    }
+    handleToggleEdit = (event) => {
+        event.stopPropagation();
+        this.setState(prevState => ({
+            editActive: !prevState.editActive
+        }));
     }
     getItemNum = () => {
         return this.props.id.substring("song-".length);
