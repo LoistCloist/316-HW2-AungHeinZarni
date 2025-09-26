@@ -94,7 +94,7 @@ export default class PlaylistCard extends React.Component {
                         value={"\uD83D\uDDD1"} />
                     <input id="duplicate-list-button-" 
                         type="button" 
-                        className="playlist-card-button"
+                        className="card-button"
                         onClick={this.handleDuplicateList}
                         value="⎘" />
                 </div>

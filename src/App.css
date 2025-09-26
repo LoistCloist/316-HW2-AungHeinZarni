@@ -274,7 +274,7 @@ input {
 .modal-root {
   position: relative;
   max-width: 60vw;
-  max-height: 30vh;
+  max-height: 600vh;
   overflow: visible;
   display: flex;
   flex-direction: column;
@@ -300,9 +300,9 @@ input {
 .modal-center {
   display: grid;
   grid-template-columns: 30% 65%;
-  grid-template-rows: 33% 33% 33%;
+  grid-template-rows: 20% 20% 20% 20% 20%;
   gap: 10px 20px;
-  font-size: 24pt;
+  font-size: 48pt;
 }
 
 span {

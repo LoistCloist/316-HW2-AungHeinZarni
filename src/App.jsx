@@ -39,7 +39,8 @@ class App extends React.Component {
             currentList : null,
             sessionData : loadedSessionData,
             songKeyMarkedForDeletion: null,
-            songToEdit: null
+            songToEdit: null,
+            songToEditIndex: -1
         }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -168,10 +169,9 @@ class App extends React.Component {
     editMarkedSong = (updatedSong) => {
         let list = {...this.state.currentList};
         let newSongs = [...list.songs];
-        let index = newSongs.findIndex((song) => {
-            return (song.youTubeId === updatedSong.youTubeId);
-        });
-        if (index >= 0) {
+        let index = this.state.songToEditIndex;
+        
+        if (index >= 0 && index < newSongs.length) {
             newSongs[index] = updatedSong;
             list.songs = newSongs;
             
@@ -179,7 +179,8 @@ class App extends React.Component {
                 currentList: list,  
                 sessionData: {
                     ...prevState.sessionData,
-                    songToEdit: null
+                    songToEdit: null,
+                    songToEditIndex: -1
                 }
             }), () => {
                 // Save to database after state update
@@ -327,9 +328,16 @@ class App extends React.Component {
         });
     }
     markSongForEditing = (song) => {
+        // Find the index of the song in the current list
+        let songIndex = -1;
+        if (this.state.currentList && this.state.currentList.songs) {
+            songIndex = this.state.currentList.songs.findIndex(s => s.youTubeId === song.youTubeId);
+        }
+        
         this.setState(prevState => ({
             ...prevState,
-            songToEdit: song
+            songToEdit: song,
+            songToEditIndex: songIndex
         }), () => {
             this.showEditSongModal();
         });
