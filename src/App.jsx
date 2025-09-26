@@ -139,31 +139,29 @@ class App extends React.Component {
             this.deleteList(this.state.currentList.key);
         }
     }
-    deleteSong = (match_key) => {
-        this.setState(prevState => ({
-            sessionData: {
-                ...prevState,
-                songKeyMarkedForDeletion: null
-            }
-        }), () => {
-            //get list the song belongs to.
-            //get the song array within the playlist.
-            //find the index of the song inside the array.
-            //delete it
-            //find another one.
-            // SO IS STORING OUR SESSION DATA
-            let list = [...this.currentList]
-            let keyIndex = this.list.songs.findIndex((match_key) => {
-                return (key === match_key);
-            });
-            let newSongs = [...this.list.songs];
-            if (keyIndex >= 0) {
-                newSongs.splice(keyIndex, 1);
-            }
-            this.db.mutationUpdateList(list);
-            this.db.mutationUpdateSessionData(this.state.sessionData);
+    deleteSong = (youtubeId) => {
+        let list = {...this.state.currentList};
+        let newSongs = [...list.songs];
+        let index = newSongs.findIndex((song) => {
+            return (song.youTubeId === youtubeId);
         });
         
+        if (index >= 0) {
+            newSongs.splice(index, 1);  // Remove the song
+            list.songs = newSongs;      // Update the list
+            
+            this.setState(prevState => ({
+                currentList: list,  // Update currentList at top level
+                sessionData: {
+                    ...prevState.sessionData,
+                    songKeyMarkedForDeletion: null
+                }
+            }), () => {
+                // Save to database after state update
+                this.db.mutationUpdateList(list);
+                this.db.mutationUpdateSessionData(this.state.sessionData);
+            });
+        }
     }
     renameList = (key, newName) => {
         let newKeyNamePairs = [...this.state.sessionData.keyNamePairs];
@@ -303,7 +301,7 @@ class App extends React.Component {
             ...prevState,
             songKeyMarkedForDeletion: key
         }));
-        this.deleteSong()
+        this.deleteSong(key);
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
@@ -346,7 +344,7 @@ class App extends React.Component {
                 <SongCards
                     currentList={this.state.currentList}
                     moveSongCallback={this.addMoveSongTransaction} 
-                    deleteSongCallback={this.deleteSong}/>
+                    deleteSongCallback={(youTubeId) => this.deleteSong(youTubeId)}/>
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}

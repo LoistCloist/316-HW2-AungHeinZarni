@@ -4,6 +4,9 @@ export default class DBManager {
     // MEANS THE BROWSER'S LOCAL STORAGE
     queryGetSessionData = () => {
         let sessionDataString = localStorage.getItem("playlister-data");
+        if (sessionDataString === null) {
+            return null; // or return a default object
+        }
         return JSON.parse(sessionDataString);
     }
 
@@ -23,6 +26,9 @@ export default class DBManager {
      */
     queryGetList = (key) => {
         let listString = localStorage.getItem("playlister-list-" + key);
+        if (listString === null) {
+            return null; // or return a default object
+        }
         return JSON.parse(listString);
     }
 
@@ -33,12 +39,16 @@ export default class DBManager {
     mutationUpdateList = (list) => {
         // AND FLOW THOSE CHANGES TO LOCAL STORAGE
         let listString = JSON.stringify(list);
+        //console.log("Session data:", localStorage.getItem("playlister-data"));
+        console.log("List data:", localStorage.getItem("playlister-list-" + list.key));
         localStorage.setItem("playlister-list-" + list.key, listString);
+        
     }
     
     mutationUpdateSessionData = (sessionData) => {
         let sessionDataString = JSON.stringify(sessionData);
         localStorage.setItem("playlister-data", sessionDataString);
+
     }
 
     mutationDeleteList = (key) => {
