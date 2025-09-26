@@ -363,7 +363,46 @@ class App extends React.Component {
         modal.classList.remove("is-visible");
     }
     duplicateList = (keyNamePair) => {
-        let modal = document.getElementById("edit-song-modal");
+        // FIRST FIGURE OUT WHAT THE NEW LIST'S KEY AND NAME WILL BE
+        let list = this.db.queryGetList(keyNamePair.key);
+        let newKey = this.state.sessionData.nextKey;
+        let newName = keyNamePair.name + newKey;
+
+        // MAKE THE NEW LIST
+        let newList = {
+            key: newKey,
+            name: newName,
+            songs: list.songs
+        };
+
+        // MAKE THE KEY,NAME OBJECT SO WE CAN KEEP IT IN OUR
+        // SESSION DATA SO IT WILL BE IN OUR LIST OF LISTS
+        let newKeyNamePair = { "key": newKey, "name": newName };
+        let updatedPairs = [...this.state.sessionData.keyNamePairs, newKeyNamePair];
+        this.sortKeyNamePairsByName(updatedPairs);
+
+        // CHANGE THE APP STATE SO THAT THE CURRENT LIST IS
+        // THIS NEW LIST AND UPDATE THE SESSION DATA SO THAT THE
+        // NEXT LIST CAN BE MADE AS WELL. NOTE, THIS setState WILL
+        // FORCE A CALL TO render, BUT THIS UPDATE IS ASYNCHRONOUS,
+        // SO ANY AFTER EFFECTS THAT NEED TO USE THIS UPDATED STATE
+        // SHOULD BE DONE VIA ITS CALLBACK
+        this.setState(prevState => ({
+            listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
+            currentList: newList,
+            sessionData: {
+                nextKey: prevState.sessionData.nextKey + 1,
+                counter: prevState.sessionData.counter + 1,
+                keyNamePairs: updatedPairs
+            }
+        }), () => {
+            // PUTTING THIS NEW LIST IN PERMANENT STORAGE
+            // IS AN AFTER EFFECT
+            this.db.mutationCreateList(newList);
+
+            // SO IS STORING OUR SESSION DATA
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
     }
     render() {
         let canAddSong = this.state.currentList !== null;

@@ -40,7 +40,7 @@ export default class DBManager {
         // AND FLOW THOSE CHANGES TO LOCAL STORAGE
         let listString = JSON.stringify(list);
         //console.log("Session data:", localStorage.getItem("playlister-data"));
-        console.log("List data:", localStorage.getItem("playlister-list-" + list.key));
+        //console.log("List data:", localStorage.getItem("playlister-list-" + list.key));
         localStorage.setItem("playlister-list-" + list.key, listString);
         
     }
