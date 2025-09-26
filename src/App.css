@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 :root {
   /* 
         FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
@@ -24,7 +25,7 @@ body {
 
 #root {
   background-color: var(--swatch-primary);
-  font-family: serif;
+  font-family: /*"Montserrat", sans-*/serif;
   position: absolute;
   width: 80%;
   left: 10%;
@@ -264,6 +265,7 @@ input {
   visibility: hidden;
   opacity: 0;
   transition: all 0.35s ease-in;
+
 }
 
 .modal.is-visible {
@@ -273,8 +275,8 @@ input {
 
 .modal-root {
   position: relative;
-  max-width: 1200vw;
-  max-height: 600vh;
+  max-width: 60vw; /*1200 */
+  max-height: 30vh;
   overflow: visible;
   display: flex;
   flex-direction: column;
@@ -302,7 +304,7 @@ input {
   grid-template-columns: 30% 65%;
   grid-template-rows: 33% 33% 33%;
   gap: 10px 20px;
-  font-size: 48pt;
+  font-size: 24pt;
 }
 
 span {
