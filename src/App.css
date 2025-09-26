@@ -126,7 +126,7 @@ body {
 
 #song-cards .song-card-title {
   font-weight: bold;
-  /* color: var(--swatch-link-emphasis) */
+  color: var(--swatch-link-emphasis)
 }
 
 #song-cards .song-card-title:hover {
