@@ -66,7 +66,7 @@ export default class SongCard extends React.Component {
     handleDeleteSong = (event) => {
         console.log("handleDeleteSong", this.props.song.youTubeId);
         event.stopPropagation();
-        this.props.deleteSongCallback(this.props.song.youTubeId)
+        this.props.deleteSongCallback(this.props.songIndex)
     }
     handleClick = (event) => {
         event.stopPropagation();
@@ -78,13 +78,13 @@ export default class SongCard extends React.Component {
         this.setState(prevState => ({
             editActive: !prevState.editActive
         }));
-        this.props.editSongCallback(this.props.song);
+        this.props.editSongCallback(this.props.song, this.props.songIndex);
     }
     handleBlur = () => {
         let song = this.props.song;
         let textValue = this.state.text;
         console.log("songCard handleBlur: " + textValue);
-        this.props.editSongCallback(song);
+        this.props.editSongCallback(song, this.props.songIndex);
         this.handleToggleEdit();
     }
     handleKeyPress = (event) => {
@@ -95,7 +95,11 @@ export default class SongCard extends React.Component {
     getItemNum = () => {
         return this.props.id.substring("song-".length);
     }
-
+    handleDuplicateSong = (event) => {
+        event.stopPropagation();
+        let song = this.props.song;
+        this.props.duplicateSongCallback(song, this.props.songIndex);
+    }
     render() {
         const { song } = this.props;
         let num = this.getItemNum();
@@ -128,7 +132,12 @@ export default class SongCard extends React.Component {
                     draggable="false"
                     onClick={this.handleDeleteSong}
                     value={"X"}
-                         />
+                />
+                <input id={"duplicate-song-button-" + num} 
+                        type="button" 
+                        className="card-button"
+                        onClick={this.handleDuplicateSong}
+                        value="⎘" />
             </div>
         )
     }

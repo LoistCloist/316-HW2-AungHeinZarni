@@ -142,15 +142,12 @@ class App extends React.Component {
             this.deleteList(this.state.currentList.key);
         }
     }
-    deleteSong = (youtubeId) => {
+    deleteSong = (songIndex) => {
         let list = {...this.state.currentList};
         let newSongs = [...list.songs];
-        let index = newSongs.findIndex((song) => {
-            return (song.youTubeId === youtubeId);
-        });
         
-        if (index >= 0) {
-            newSongs.splice(index, 1);  // Remove the song
+        if (songIndex >= 0 && songIndex < newSongs.length) {
+            newSongs.splice(songIndex, 1);  // Remove the song
             list.songs = newSongs;      // Update the list
             
             this.setState(prevState => ({
@@ -167,8 +164,8 @@ class App extends React.Component {
         }
     }
     editMarkedSong = (updatedSong) => {
-        let list = {...this.state.currentList};
-        let newSongs = [...list.songs];
+        let list = JSON.parse(JSON.stringify(this.state.currentList));
+        let newSongs = JSON.parse(JSON.stringify(list.songs));
         let index = this.state.songToEditIndex;
         
         if (index >= 0 && index < newSongs.length) {
@@ -189,6 +186,28 @@ class App extends React.Component {
                 this.hideEditSongModal();
             });
         }
+    }
+    duplicateSong = (song, originalIndex) => {
+        let list = JSON.parse(JSON.stringify(this.state.currentList));
+        let newSongs = JSON.parse(JSON.stringify(list.songs));
+        
+        let duplicatedSong = JSON.parse(JSON.stringify(song));
+        duplicatedSong.title = song.title + " (Copy)";
+        
+        // Add the duplicated song to the end of the list
+        newSongs.push(duplicatedSong);
+        list.songs = newSongs;
+        
+        this.setState(prevState => ({
+            currentList: list,
+            sessionData: {
+                ...prevState.sessionData
+            }
+        }), () => {
+            // Save to database after state update
+            this.db.mutationUpdateList(list);
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
     }
     renameList = (key, newName) => {
         let newKeyNamePairs = [...this.state.sessionData.keyNamePairs];
@@ -327,16 +346,10 @@ class App extends React.Component {
             this.showDeleteListModal();
         });
     }
-    markSongForEditing = (song) => {
-        // Find the index of the song in the current list
-        let songIndex = -1;
-        if (this.state.currentList && this.state.currentList.songs) {
-            songIndex = this.state.currentList.songs.findIndex(s => s.youTubeId === song.youTubeId);
-        }
-        
+    markSongForEditing = (song, songIndex) => {
         this.setState(prevState => ({
             ...prevState,
-            songToEdit: song,
+            songToEdit: JSON.parse(JSON.stringify(song)),
             songToEditIndex: songIndex
         }), () => {
             this.showEditSongModal();
@@ -404,6 +417,7 @@ class App extends React.Component {
             this.db.mutationUpdateSessionData(this.state.sessionData);
         });
     }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -435,8 +449,9 @@ class App extends React.Component {
                 <SongCards
                     currentList={this.state.currentList}
                     moveSongCallback={this.addMoveSongTransaction} 
-                    deleteSongCallback={(youTubeId) => this.deleteSong(youTubeId)}
+                    deleteSongCallback={(songIndex) => this.deleteSong(songIndex)}
                     editSongCallback={this.markSongForEditing}
+                    duplicateSongCallback={this.duplicateSong}
                 />
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}

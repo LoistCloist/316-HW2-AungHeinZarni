@@ -12,13 +12,23 @@ export default class EditSongModal extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.song !== this.props.song && this.props.song) {
-            this.setState({
-                title: this.props.song.title || '',
-                artist: this.props.song.artist || '',
-                year: this.props.song.year || '',
-                youTubeId: this.props.song.youTubeId || ''
-            });
+        if (prevProps.song !== this.props.song) {
+            if (this.props.song) {
+                this.setState({
+                    title: this.props.song.title || '',
+                    artist: this.props.song.artist || '',
+                    year: this.props.song.year || '',
+                    youTubeId: this.props.song.youTubeId || ''
+                });
+            } else {
+                // Reset state when song is null (modal closed)
+                this.setState({
+                    title: '',
+                    artist: '',
+                    year: '',
+                    youTubeId: ''
+                });
+            }
         }
     }
 
@@ -30,13 +40,11 @@ export default class EditSongModal extends Component {
 
     handleConfirm = () => {
         const { editSongCallback } = this.props;
-        const updatedSong = {
-            ...this.props.song,
-            title: this.state.title,
-            artist: this.state.artist,
-            year: this.state.year,
-            youTubeId: this.state.youTubeId
-        };
+        const updatedSong = JSON.parse(JSON.stringify(this.props.song));
+        updatedSong.title = this.state.title;
+        updatedSong.artist = this.state.artist;
+        updatedSong.year = this.state.year;
+        updatedSong.youTubeId = this.state.youTubeId;
         this.props.editSongCallback(updatedSong);
     }
 
@@ -57,25 +65,25 @@ export default class EditSongModal extends Component {
                             className='modal-textfield' 
                             type="text" 
                             value={this.state.title}
-                            onChange={(e) => this.handleInputChange('title', e.target.value)} />
+                            onChange={(event) => this.handleInputChange('title', event.target.value)} />
                         <div id="artist-prompt" className="modal-prompt">Artist:</div>
                         <input id="edit-song-modal-artist-textfield" 
                             className='modal-textfield' 
                             type="text" 
                             value={this.state.artist}
-                            onChange={(e) => this.handleInputChange('artist', e.target.value)} />
+                            onChange={(event) => this.handleInputChange('artist', event.target.value)} />
                         <div id="year-prompt" className="modal-prompt">Year:</div>
                         <input id="edit-song-modal-year-textfield" 
                             className='modal-textfield' 
                             type="text" 
                             value={this.state.year}
-                            onChange={(e) => this.handleInputChange('year', e.target.value)} />
+                            onChange={(event) => this.handleInputChange('year', event.target.value)} />
                         <div id="you-tube-id-prompt" className="modal-prompt">You Tube Id:</div>
                         <input id="edit-song-modal-youTubeId-textfield" 
                             className='modal-textfield' 
                             type="text" 
                             value={this.state.youTubeId}
-                            onChange={(e) => this.handleInputChange('youTubeId', e.target.value)} />
+                            onChange={(event) => this.handleInputChange('youTubeId', event.target.value)} />
                     </div>
                     <div className="modal-south">
                         <input type="button" 
