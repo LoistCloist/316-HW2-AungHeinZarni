@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 :root {
   /* 
         FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
@@ -24,7 +25,7 @@ body {
 
 #root {
   background-color: var(--swatch-primary);
-  font-family: serif;
+  font-family: "Montserrat", serif;
   position: absolute;
   width: 80%;
   left: 10%;
@@ -52,7 +53,7 @@ body {
   background-image: linear-gradient(to bottom,         
   #b8b808, #636723);
   color: white;
-  font-size: 54pt;
+  font-size: 36pt;
   border-color: black;
   border-width: 2px;
   border-style: solid;
@@ -63,7 +64,7 @@ body {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   text-align:center;
-  font-size: 36pt;
+  font-size: 24pt;
   font-weight: bold;
   display:flex;
   flex-direction: row;
@@ -123,7 +124,7 @@ body {
   border: 3px solid var(--swatch-contrast);
   transform: scale(1.02);
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  font-size: 24pt;
+  font-size: 12pt;
   margin: 10px;
   padding: 10px;
   border-radius: 125px;
@@ -148,17 +149,41 @@ body {
   float: right;
   background: transparent;
   border: none;
-  font-size: 20pt;
+  font-size: 12pt;
   cursor: pointer;
+  margin-left: auto;
 }
 
 
-.playlist-card, .selected-playlist-card, .unselected-playlist-card,
-.song-card, .selected-song-card, .unselected-song-card, .is-dragged-to, .is-dragging {
+.playlist-card, .selected-playlist-card, .unselected-playlist-card {
   font-size: 24pt;
   margin: 10px;
   padding: 10px;
   border-radius: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+}
+
+.song-card, .selected-song-card, .unselected-song-card, .is-dragged-to, .is-dragging {
+  font-size: 12pt;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 125px;
+  display: flex;
+  align-items: center;
+  height: 20%;
+}
+
+.song-card-dragged-to {
+  font-size: 12pt;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 125px;
+  display: flex;
+  align-items: center;
+  height: 20%;
 }
 
 .unselected-playlist-card:hover {
@@ -182,9 +207,11 @@ body {
 .card-button, .card-button-disabled {
   font-size:18pt;
   border-width: 0px;
-  float:right;
   color: black;
   cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+
 }
 
 .card-button:hover {
@@ -197,12 +224,29 @@ body {
   cursor: not-allowed;
 }
 
-.song-card, .song-card-dragged-to { 
-  display:flex;
-  align-items: center;
-  font-size: 24pt;
-  height:20%;
+.playlist-card-text {
+  font-size: 12pt;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
+.song-card-text-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.song-card-button {
+  flex-shrink: 0;
+  margin-left: 10px;
+  font-size: 12pt;
+  cursor: pointer;
+}
+
 
 .song-card:hover .song-card-title:hover {
   color: var(--swatch-link-hover);
