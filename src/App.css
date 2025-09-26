@@ -15,6 +15,7 @@
   --swatch-link-hover:pink;
   --switch-link-active: magenta;
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
+
 }
 
 body {
@@ -116,15 +117,21 @@ body {
   color: var(--swatch-contrast);
   border: 2px solid #333;
 }
-
-#song-cards .song-card-dragged-to {
-  background-color: #ffd27f;
-  border-color: #cc8a00;
+#song-cards .song-card:hover {
+  background-color: var(--swatch-contrast);
+  color: var(--swatch-contrast);
+  border: 2px solid #333;
 }
+
 
 #song-cards .song-card-title {
   font-weight: bold;
-  color: var(--swatch-link-emphasis)
+  /* color: var(--swatch-link-emphasis) */
+}
+
+#song-cards .song-card-title:hover {
+  font-weight: bold;
+  color: var(--swatch-link-hover)
 }
 #song-cards .song-card-artist { font-style: italic; }
 #song-cards .song-card-button {
@@ -135,11 +142,13 @@ body {
   cursor: pointer;
 }
 
-.playlist-card, .selected-playlist-card, .unselected-playlist-card {
-  font-size: 18pt;
+
+.playlist-card, .selected-playlist-card, .unselected-playlist-card,
+.song-card, .selected-song-card, .unselected-song-card {
+  font-size: 24pt;
   margin: 10px;
-  padding: 20px;
-  border-radius: 25px;
+  padding: 10px;
+  border-radius: 125px;
 }
 
 .unselected-playlist-card:hover {
@@ -148,12 +157,15 @@ body {
   color:white;
 }
 
-.selected-playlist-card {
+.selected-playlist-card,
+.selected-song-card {
   background-color: var(--swatch-accent);
-  color: white;
+  /* color: white; */
+  color: var(--swatch-contrast);
 }
 
-.unselected-playlist-card {
+.unselected-playlist-card,
+.unselected-song-card {
   background-color: var(--swatch-complement);
 }
 
@@ -175,31 +187,24 @@ body {
   cursor: not-allowed;
 }
 
-.song-card, .song-card-dragged-to, .selected-song-card, .unselected-song-card { 
+.song-card, .song-card-dragged-to { 
+  display:flex;
+  align-items: center;
   font-size: 24pt;
-  margin: 10px;
-  padding: 10px;
-  border-radius: 125px;                                                     
+  height:20%;
 }
 
-.selected-song-card {
-  background-color: var(--swatch-accent);
-  color: var(--swatch-contrast);
-}
-
-.unselected-song-card {
-    background-color: var(--swatch-complement);
-}
-
-.unselected-song-card:hover {
-  cursor: pointer;
-  background-color: var(--swatch-contrast);
-  color:white;
-}
 .song-card:hover .song-card-title:hover {
-  cursor: pointer;
-  background-color: var(--swatch-contrast);
-  color:white;
+  color: var(--swatch-link-hover);
+}
+
+.song-card-title {
+  text-decoration: none;
+}
+
+.song-card-title:hover {
+  text-decoration: none;
+  color: var(--swatch-link-hover)
 }
 
 .song-card-title:active {
@@ -217,6 +222,12 @@ body {
 .song-card-year {
   color: blue;
 }
+
+.is-dragging {
+  border: 2px black solid;
+  opacity: 0.5;
+}
+
 
 input {
   font-size:20pt;

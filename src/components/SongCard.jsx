@@ -8,6 +8,7 @@ export default class SongCard extends React.Component {
             isDragging: false,
             draggedTo: false,
             isHovered: false,
+            isSelected: false
         }
     }
     handleDragStart = (event) => {
@@ -75,9 +76,6 @@ export default class SongCard extends React.Component {
         let itemClass = "song-card";
         if (this.state.draggedTo) {
             itemClass = "song-card-dragged-to";
-        }
-        if (this.state.isHovered) {
-            itemClass += " song-card-hovered";
         }
         return (
             <div
