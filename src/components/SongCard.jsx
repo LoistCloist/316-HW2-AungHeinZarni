@@ -7,12 +7,13 @@ export default class SongCard extends React.Component {
         this.state = {
             isDragging: false,
             draggedTo: false,
-            editActive: false
+            editActive: false,
+            text: this.props.song.title
         }
     }
     handleDragStart = (event) => {
         // Always use the main div's ID, not the child element's ID
-        event.dataTransfer.setData("song", event.currentTarget);
+        event.dataTransfer.setData("song", event.currentTarget.id);
         this.setState(prevState => ({
             isDragging: true,
             draggedTo: prevState.draggedTo
@@ -23,6 +24,12 @@ export default class SongCard extends React.Component {
         this.setState(prevState => ({
             isDragging: prevState.isDragging,
             draggedTo: true
+        }));
+    }
+    handleDragEnd = (event) => {
+        this.setState(prevState => ({
+            isDragging: false,
+            draggedTo: false
         }));
     }
     handleDragEnter = (event) => {
@@ -64,12 +71,26 @@ export default class SongCard extends React.Component {
     handleClick = (event) => {
         event.stopPropagation();
         this.handleToggleEdit(event);
+        console.log("THisis happening")
     }
     handleToggleEdit = (event) => {
         event.stopPropagation();
         this.setState(prevState => ({
             editActive: !prevState.editActive
         }));
+        this.props.editSongCallback(this.props.song);
+    }
+    handleBlur = () => {
+        let song = this.props.song;
+        let textValue = this.state.text;
+        console.log("songCard handleBlur: " + textValue);
+        this.props.editSongCallback(song);
+        this.handleToggleEdit();
+    }
+    handleKeyPress = (event) => {
+        if (event.code === "Enter") {
+            this.handleBlur();
+        }
     }
     getItemNum = () => {
         return this.props.id.substring("song-".length);
@@ -87,12 +108,14 @@ export default class SongCard extends React.Component {
                 id={'song-' + num}
                 className={itemClass}
                 onDragStart={this.handleDragStart}
+                onDragEnd={this.handleDragEnd}
                 onDragOver={this.handleDragOver}
                 onDragEnter={this.handleDragEnter}
                 onDragLeave={this.handleDragLeave}
                 onDrop={this.handleDrop}
                 draggable="true"
                 onClick={this.handleClick}
+                onKeyUp={this.handleKeyPress}
             >
                 <a id={"song-card-title-" + num} className="song-card-title" href={"https://www.youtube.com/watch?v="+song.youTubeId} draggable="false">{song.title}</a>
                 <span id={"song-card-year-" + num} className="song-card-year" draggable="false"> ({song.year})</span>

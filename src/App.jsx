@@ -38,7 +38,8 @@ class App extends React.Component {
             listKeyPairMarkedForDeletion : null,
             currentList : null,
             sessionData : loadedSessionData,
-            songKeyMarkedForDeletion: null
+            songKeyMarkedForDeletion: null,
+            songToEdit: null
         }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -161,6 +162,30 @@ class App extends React.Component {
                 // Save to database after state update
                 this.db.mutationUpdateList(list);
                 this.db.mutationUpdateSessionData(this.state.sessionData);
+            });
+        }
+    }
+    editMarkedSong = (updatedSong) => {
+        let list = {...this.state.currentList};
+        let newSongs = [...list.songs];
+        let index = newSongs.findIndex((song) => {
+            return (song.youTubeId === updatedSong.youTubeId);
+        });
+        if (index >= 0) {
+            newSongs[index] = updatedSong;
+            list.songs = newSongs;
+            
+            this.setState(prevState => ({
+                currentList: list,  
+                sessionData: {
+                    ...prevState.sessionData,
+                    songToEdit: null
+                }
+            }), () => {
+                // Save to database after state update
+                this.db.mutationUpdateList(list);
+                this.db.mutationUpdateSessionData(this.state.sessionData);
+                this.hideEditSongModal();
             });
         }
     }
@@ -301,10 +326,10 @@ class App extends React.Component {
             this.showDeleteListModal();
         });
     }
-    markSongForEditing = (id) => {
+    markSongForEditing = (song) => {
         this.setState(prevState => ({
             ...prevState,
-            songIdToEdit: id
+            songToEdit: song
         }), () => {
             this.showEditSongModal();
         });
@@ -329,6 +354,9 @@ class App extends React.Component {
         let modal = document.getElementById("edit-song-modal");
         modal.classList.remove("is-visible");
     }
+    duplicateList = (keyNamePair) => {
+        let modal = document.getElementById("edit-song-modal");
+    }
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -346,6 +374,7 @@ class App extends React.Component {
                     deleteListCallback={this.markListForDeletion}
                     loadListCallback={this.loadList}
                     renameListCallback={this.renameList}
+                    duplicateListCallback={this.duplicateList}
                 />
                 <EditToolbar
                     canAddSong={canAddSong}
@@ -368,9 +397,9 @@ class App extends React.Component {
                     deleteListCallback={this.deleteMarkedList}
                 />
                 <EditSongModal
-                    song={this.state.songIdToEdit}
+                    song={this.state.songToEdit}
                     hideEditSongModalCallback={this.hideEditSongModal}
-                    EditListCallback={this.editMarkedSong}
+                    editSongCallback={this.editMarkedSong}
                 />
             </div>
         );

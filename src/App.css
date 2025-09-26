@@ -118,9 +118,15 @@ body {
   border: 2px solid #333;
 }
 #song-cards .song-card-dragged-to {
-  background-color: var(--swatch-complement);
-  color: var(--swatch-contrast);
-  border: 2px solid #333;
+  background-color: var(--swatch-accent);
+  color: white;
+  border: 3px solid var(--swatch-contrast);
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  font-size: 24pt;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 125px;
 }
 #song-cards .song-card:hover {
   background-color: var(--swatch-contrast);
