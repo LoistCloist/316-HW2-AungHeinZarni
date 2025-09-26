@@ -7,11 +7,16 @@ export default class DBManager {
         return JSON.parse(sessionDataString);
     }
 
+
     queryIsList = (key) => {
         let list = localStorage.getItem("playlister-list-" + key);
         return list != null;
     }
-
+    
+    queryIsSong = (key) => {
+        let song = localStorage.getItem(key);
+        return song != null;
+    }
     /**
      * This query asks local storage for a list with a particular key,
      * which is then returned by this function.
@@ -40,4 +45,5 @@ export default class DBManager {
         if (this.queryIsList(key))
             localStorage.removeItem("playlister-list-" + key);
     }
+
 }

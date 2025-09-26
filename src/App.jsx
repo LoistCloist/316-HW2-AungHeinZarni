@@ -36,7 +36,8 @@ class App extends React.Component {
         this.state = {
             listKeyPairMarkedForDeletion : null,
             currentList : null,
-            sessionData : loadedSessionData
+            sessionData : loadedSessionData,
+            songKeyMarkedForDeletion: null
         }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -111,6 +112,7 @@ class App extends React.Component {
             listKeyPairMarkedForDeletion : null,
             currentList: newCurrentList,
             sessionData: {
+                ...prevState,
                 nextKey: prevState.sessionData.nextKey,
                 counter: prevState.sessionData.counter - 1,
                 keyNamePairs: newKeyNamePairs
@@ -118,7 +120,7 @@ class App extends React.Component {
         }), () => {
             // DELETING THE LIST FROM PERMANENT STORAGE
             // IS AN AFTER EFFECT
-            this.db.mutationDeleteList(key);
+            this.db.mutationUpdateList(key);
 
             // SO IS STORING OUR SESSION DATA
             this.db.mutationUpdateSessionData(this.state.sessionData);
@@ -128,11 +130,40 @@ class App extends React.Component {
         this.deleteList(this.state.listKeyPairMarkedForDeletion.key);
         this.hideDeleteListModal();
     }
+    deleteMarkedSong = () => {
+        this.deleteSong(this.state.songKeyMarkedForDeletion);
+    }
     // THIS FUNCTION SPECIFICALLY DELETES THE CURRENT LIST
     deleteCurrentList = () => {
         if (this.state.currentList) {
             this.deleteList(this.state.currentList.key);
         }
+    }
+    deleteSong = (match_key) => {
+        this.setState(prevState => ({
+            sessionData: {
+                ...prevState,
+                songKeyMarkedForDeletion: null
+            }
+        }), () => {
+            //get list the song belongs to.
+            //get the song array within the playlist.
+            //find the index of the song inside the array.
+            //delete it
+            //find another one.
+            // SO IS STORING OUR SESSION DATA
+            let list = [...this.currentList]
+            let keyIndex = this.list.songs.findIndex((match_key) => {
+                return (key === match_key);
+            });
+            let newSongs = [...this.list.songs];
+            if (keyIndex >= 0) {
+                newSongs.splice(keyIndex, 1);
+            }
+            this.db.mutationUpdateList(list);
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
+        
     }
     renameList = (key, newName) => {
         let newKeyNamePairs = [...this.state.sessionData.keyNamePairs];
@@ -235,6 +266,10 @@ class App extends React.Component {
         let transaction = new MoveSong_Transaction(this, start, end);
         this.tps.processTransaction(transaction);
     }
+    addDeleteSongTransaction = (start, end) => {
+        let transaction = new DeleteSong_Transaction(this, start, end);
+        this.tps.processTransaction(transaction);
+    }
     // THIS FUNCTION BEGINS THE PROCESS OF PERFORMING AN UNDO
     undo = () => {
         if (this.tps.hasTransactionToUndo()) {
@@ -262,6 +297,13 @@ class App extends React.Component {
             // PROMPT THE USER
             this.showDeleteListModal();
         });
+    }
+    markSongForDeletion = (key) => {
+        this.setState(prevState => ({
+            ...prevState,
+            songKeyMarkedForDeletion: key
+        }));
+        this.deleteSong()
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
@@ -303,9 +345,8 @@ class App extends React.Component {
                 />
                 <SongCards
                     currentList={this.state.currentList}
-                    moveSongCallback={this.addMoveSongTransaction} />
-                <Statusbar 
-                    currentList={this.state.currentList} />
+                    moveSongCallback={this.addMoveSongTransaction} 
+                    deleteSongCallback={this.deleteSong}/>
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}

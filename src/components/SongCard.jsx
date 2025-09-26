@@ -6,21 +6,16 @@ export default class SongCard extends React.Component {
 
         this.state = {
             isDragging: false,
-            draggedTo: false
+            draggedTo: false,
+            editActive: false
         }
     }
     handleDragStart = (event) => {
         // Always use the main div's ID, not the child element's ID
-        event.dataTransfer.setData("song", event.currentTarget.id);
+        event.dataTransfer.setData("song", event.currentTarget);
         this.setState(prevState => ({
             isDragging: true,
             draggedTo: prevState.draggedTo
-        }));
-    }
-    handleDragEnd = (event) => {
-        this.setState(prevState => ({
-            isDragging: false,
-            draggedTo: false
         }));
     }
     handleDragOver = (event) => {
@@ -61,6 +56,10 @@ export default class SongCard extends React.Component {
         // ASK THE MODEL TO MOVE THE DATA
         this.props.moveCallback(sourceId, targetId);
     }
+    handleDeleteSong = (event) => {
+        event.stopPropagation();
+        this.props.deleteSongCallback(this.props.songKey)
+    }
     getItemNum = () => {
         return this.props.id.substring("song-".length);
     }
@@ -77,28 +76,24 @@ export default class SongCard extends React.Component {
                 id={'song-' + num}
                 className={itemClass}
                 onDragStart={this.handleDragStart}
-                onDragEnd={this.handleDragEnd}
                 onDragOver={this.handleDragOver}
                 onDragEnter={this.handleDragEnter}
                 onDragLeave={this.handleDragLeave}
                 onDrop={this.handleDrop}
                 draggable="true"
             >
-                <a id={"song-card-title-" + num} className="song-card-title" href={"https://www.youtube.com/watch?v="+song.youTubeId} draggable="false"> {song.title}</a>
-                {" "}
+                <a id={"song-card-title-" + num} className="song-card-title" href={"https://www.youtube.com/watch?v="+song.youTubeId} draggable="false">{song.title}</a>
                 <span id={"song-card-year-" + num} className="song-card-year" draggable="false"> ({song.year})</span>
-                {" "}
-                <span id={"song-card-by-" + num} className="song-card-by" draggable="false"> by</span>
-                {" "}
-                <span id={"song-card-artist-" + num} className="song-card-artist" draggable="false"> {song.artist}</span>
-                {" "}
+                <span id={"song-card-by-" + num} className="song-card-by" draggable="false"> by </span>
+                <span id={"song-card-artist-" + num} className="song-card-artist" draggable="false">{song.artist}</span>
                 <button 
                     type="button"
                     id={"remove-song-button-" + num}
                     className="song-card-button"
                     draggable="false"
+                    onClick={this.handleDeleteSong}
                 >
-                    X
+                    XXX
                 </button>
             </div>
         )
