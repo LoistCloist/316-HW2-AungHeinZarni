@@ -117,6 +117,40 @@ body {
 #add-playlist-button {
   float:left;
 }
+
+.toolbar-button {
+  font-size: 20pt;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #333;
+  color: black;
+  cursor: pointer;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.toolbar-button:hover {
+  cursor: pointer;
+  color: black;
+  background-color: #e0e0e0;
+}
+
+.toolbar-button.disabled,
+.toolbar-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+  color: #999;
+}
+
+.toolbar-button.disabled:hover,
+.toolbar-button:disabled:hover {
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+  color: #999;
+}
 #song-cards .song-card {
   background-color: var(--swatch-complement);
   color: var(--swatch-contrast);
