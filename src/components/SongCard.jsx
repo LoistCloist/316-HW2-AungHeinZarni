@@ -121,23 +121,25 @@ export default class SongCard extends React.Component {
                 onClick={this.handleClick}
                 onKeyUp={this.handleKeyPress}
             >
-                <a id={"song-card-title-" + num} className="song-card-title" href={"https://www.youtube.com/watch?v="+song.youTubeId} draggable="false">{song.title}</a>
-                <span id={"song-card-year-" + num} className="song-card-year" draggable="false"> ({song.year})</span>
-                <span id={"song-card-by-" + num} className="song-card-by" draggable="false"> by </span>
+                <a id={"song-card-title-" + num} className="song-card-title" href={"https://www.youtube.com/watch?v="+song.youTubeId} draggable="false">{song.title}&nbsp;</a>
+                <span id={"song-card-year-" + num} className="song-card-year" draggable="false">({song.year})&nbsp;</span>
+                <span id={"song-card-by-" + num} className="song-card-by" draggable="false">by&nbsp;</span>
                 <span id={"song-card-artist-" + num} className="song-card-artist" draggable="false">{song.artist}</span>
 
-                <input type="button"
-                    id={"remove-song-button-" + num}
-                    className="card-button"
-                    draggable="false"
-                    onClick={this.handleDeleteSong}
-                    value={"X"}
-                />
-                <input id={"duplicate-song-button-" + num} 
-                        type="button" 
+                <div className="song-card-buttons">
+                    <input type="button"
+                        id={"remove-song-button-" + num}
                         className="card-button"
-                        onClick={this.handleDuplicateSong}
-                        value="⎘" />
+                        draggable="false"
+                        onClick={this.handleDeleteSong}
+                        value={"X"}
+                    />
+                    <input id={"duplicate-song-button-" + num} 
+                            type="button" 
+                            className="card-button"
+                            onClick={this.handleDuplicateSong}
+                            value="⎘" />
+                </div>
             </div>
         )
     }

@@ -10,7 +10,18 @@ export default class EditSongModal extends Component {
             youTubeId: ''
         };
     }
+    componentDidMount() {
+        document.addEventListener('keydown', this.handleKeyDown);
+    }
 
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+    }
+    handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            this.handleConfirm();
+        }
+    }
     componentDidUpdate(prevProps) {
         if (prevProps.song !== this.props.song) {
             if (this.props.song) {
@@ -51,10 +62,6 @@ export default class EditSongModal extends Component {
     render() {
         const { song, hideEditSongModalCallback } = this.props;
         
-        if (!song) {
-            return null;
-        }
-
         return (
             <div id="edit-song-modal" className="modal" data-animation="slideInOutLeft">
                 <div id='edit-song-root' className="modal-root">

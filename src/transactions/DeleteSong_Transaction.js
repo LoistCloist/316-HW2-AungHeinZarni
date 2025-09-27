@@ -1,6 +1,6 @@
 import { jsTPS_Transaction } from "jstps";
 /**
- * MoveSong_Transaction
+ * DeleteSong_Transaction
  * 
  * This class represents a transaction that works with drag
  * and drop. It will be managed by the transaction stack.
@@ -8,19 +8,25 @@ import { jsTPS_Transaction } from "jstps";
  * @author McKilla Gorilla
  * @author ?
  */
-export default class MoveSong_Transaction extends jsTPS_Transaction {
-    constructor(initApp, initOldSongIndex, initNewSongIndex) {
+export default class DeleteSong_Transaction extends jsTPS_Transaction {
+    constructor(initApp, initSongIndex) {
         super();
         this.app = initApp;
-        this.oldSongIndex = initOldSongIndex;
-        this.newSongIndex = initNewSongIndex;
+        this.songIndex = initSongIndex;
+        this.deletedSong = null; // Will store the song being deleted
     }
 
     executeDo() {
-        this.app.moveSong(this.oldSongIndex, this.newSongIndex);
+        // Store the song before deleting it
+        this.deletedSong = JSON.parse(JSON.stringify(this.app.state.currentList.songs[this.songIndex]));
+        this.app.deleteSong(this.songIndex);
     }
     
     executeUndo() {
-        this.app.moveSong(this.newSongIndex, this.oldSongIndex);
+        // First add the song back to the end
+        this.app.addSong();
+        // Then edit it to match the original deleted song
+        let lastIndex = this.app.state.currentList.songs.length - 1;
+        this.app.editSongAtIndex(lastIndex, this.deletedSong);
     }
 }

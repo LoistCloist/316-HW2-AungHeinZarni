@@ -145,14 +145,6 @@ body {
   color: var(--swatch-link-hover)
 }
 #song-cards .song-card-artist { font-style: italic; }
-#song-cards .song-card-button {
-  float: right;
-  background: transparent;
-  border: none;
-  font-size: 12pt;
-  cursor: pointer;
-  margin-left: auto;
-}
 
 
 .playlist-card, .selected-playlist-card, .unselected-playlist-card {
@@ -204,14 +196,22 @@ body {
   background-color: var(--swatch-complement);
 }
 
+.song-card-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 5px;
+}
+
 .card-button, .card-button-disabled {
-  font-size:18pt;
+  font-size: 18pt;
   border-width: 0px;
   color: black;
   cursor: pointer;
   flex-shrink: 0;
-  margin-left: auto;
-
+  background: white;
+  border: none;
+  padding: 2px 4px;
+  border-radius: 3px;
 }
 
 .card-button:hover {
@@ -222,6 +222,7 @@ body {
 .card-button-disabled {
   opacity: 0.25; 
   cursor: not-allowed;
+  transparent: 0.25;
 }
 
 .playlist-card-text {
@@ -240,12 +241,6 @@ body {
   min-width: 0;
 }
 
-.song-card-button {
-  flex-shrink: 0;
-  margin-left: 10px;
-  font-size: 12pt;
-  cursor: pointer;
-}
 
 
 .song-card:hover .song-card-title:hover {
