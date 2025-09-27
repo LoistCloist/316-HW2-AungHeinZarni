@@ -526,6 +526,9 @@ class App extends React.Component {
                     editSongCallback={this.markSongForEditing}
                     duplicateSongCallback={this.addDuplicateSongTransaction}
                 />
+                <Statusbar
+                    currentList={this.state.currentList}
+                />
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}
