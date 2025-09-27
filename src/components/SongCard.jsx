@@ -12,7 +12,6 @@ export default class SongCard extends React.Component {
         }
     }
     handleDragStart = (event) => {
-        // Always use the main div's ID, not the child element's ID
         event.dataTransfer.setData("song", event.currentTarget.id);
         this.setState(prevState => ({
             isDragging: true,
@@ -48,7 +47,6 @@ export default class SongCard extends React.Component {
     }
     handleDrop = (event) => {
         event.preventDefault();
-        // Always use the main div's ID, not the child element's ID
         let target = event.currentTarget;
         let targetId = target.id;
         targetId = targetId.substring(targetId.indexOf("-") + 1);

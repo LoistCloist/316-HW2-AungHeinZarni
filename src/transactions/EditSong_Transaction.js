@@ -22,7 +22,7 @@ export default class EditSong_Transaction extends jsTPS_Transaction {
     }
     
     executeUndo() {
-        // Edit the old song into the new song (reverse transformation)
+        // Edit the old song into the new song
         this.app.editSongAtIndex(this.songIndex, this.oldSong);
     }
 }
